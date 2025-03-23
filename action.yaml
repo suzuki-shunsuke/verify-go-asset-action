@@ -14,6 +14,11 @@ inputs:
       Tool repository
     required: false
     default: ${{github.repository}}
+outputs:
+  dir:
+    value: ${{ steps.tempdir.outputs.value }}
+    description: |
+      The directory where assets are downloaded.
 runs:
   using: composite
   steps:
@@ -28,16 +33,24 @@ runs:
       env:
         AQUA_CONFIG: ${{ steps.aqua_config.outputs.value }}
 
+    - id: tempdir
+      shell: bash
+      run: |
+        tempdir=$(mktemp -d)
+        echo "value=$tempdir" >> "$GITHUB_OUTPUT"
+
     # Download assets from the release
     - env:
         GH_TOKEN: ${{github.token}}
         VERSION: ${{inputs.version}}
         REPO: ${{inputs.repository}}
       shell: bash
+      working-directory: ${{ steps.tempdir.outputs.value }}
       run: |
         gh release download -R "$REPO" "$VERSION"
     # Verify assets using Cosign
     - shell: bash
+      working-directory: ${{ steps.tempdir.outputs.value }}
       env:
         AQUA_CONFIG: ${{ steps.aqua_config.outputs.value }}
       run: |
@@ -51,6 +64,7 @@ runs:
         sha256sum -c - < "$checksum_file"
     # Verify assets using SLSA Provenance
     - shell: bash
+      working-directory: ${{ steps.tempdir.outputs.value }}
       env:
         VERSION: ${{inputs.version}}
         AQUA_CONFIG: ${{ steps.aqua_config.outputs.value }}
@@ -64,6 +78,7 @@ runs:
         done
     # Verify assets using GitHub Attestation
     - shell: bash
+      working-directory: ${{ steps.tempdir.outputs.value }}
       env:
         GH_TOKEN: ${{github.token}}
         VERSION: ${{inputs.version}}
