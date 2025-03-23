@@ -72,6 +72,6 @@ runs:
         for asset in *.tar.gz *.zip; do
           gh attestation verify "$asset" \
             -R "$REPO" \
-            --soruce-ref "refs/tags/$VERSION" \
+            --source-ref "refs/tags/$VERSION" \
             --signer-workflow suzuki-shunsuke/go-release-workflow/.github/workflows/release.yaml
         done
