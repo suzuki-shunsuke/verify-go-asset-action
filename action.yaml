@@ -54,6 +54,7 @@ runs:
       env:
         VERSION: ${{inputs.version}}
         AQUA_CONFIG: ${{ steps.aqua_config.outputs.value }}
+        REPO: ${{inputs.repository}}
       run: |
         for asset in *.tar.gz *.zip; do
           slsa-verifier verify-artifact "$asset" \
@@ -66,6 +67,7 @@ runs:
       env:
         GH_TOKEN: ${{github.token}}
         VERSION: ${{inputs.version}}
+        REPO: ${{inputs.repository}}
       run: |
         for asset in *.tar.gz *.zip; do
           gh attestation verify "$asset" \
