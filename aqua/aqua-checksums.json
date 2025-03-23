@@ -1,0 +1,64 @@
+{
+  "checksums": [
+    {
+      "id": "github_release/github.com/sigstore/cosign/v2.4.3/cosign-darwin-amd64",
+      "checksum": "98A3BFD691F42C6A5B721880116F89210D8FDFF61CC0224CD3EF2F8E55A466FB",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sigstore/cosign/v2.4.3/cosign-darwin-arm64",
+      "checksum": "EDFC761B27CED77F0F9CA288FF4FAC7CAA898E1E9DB38F4DFDF72160CDF8E638",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sigstore/cosign/v2.4.3/cosign-linux-amd64",
+      "checksum": "CAAAD125ACEF1CB81D58DCDC454A1E429D09A750D1E9E2B3ED1AED8964454708",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sigstore/cosign/v2.4.3/cosign-linux-arm64",
+      "checksum": "BD0F9763BCA54DE88699C3656ADE2F39C9A1C7A2916FF35601CAF23A79BE0629",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sigstore/cosign/v2.4.3/cosign-windows-amd64.exe",
+      "checksum": "A2AC24E197111C9430CB2A98F10A641164381AFB83DF036504868E4EA5720800",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/slsa-framework/slsa-verifier/v2.7.0/slsa-verifier-darwin-amd64",
+      "checksum": "36694B43AB23BE234ADD09272E5FAF77349D7E267BF65C01DC9BCDF58C4F496E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/slsa-framework/slsa-verifier/v2.7.0/slsa-verifier-darwin-arm64",
+      "checksum": "84D9122CE12E0C79080844285FD5C4976407ED3463E434A1B21B0979C46B1E55",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/slsa-framework/slsa-verifier/v2.7.0/slsa-verifier-linux-amd64",
+      "checksum": "499BEFB675EFCCA9001AFE6E5156891B91E71F9C07AB120A8943979F85CC82E6",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/slsa-framework/slsa-verifier/v2.7.0/slsa-verifier-linux-arm64",
+      "checksum": "DC3845D7605F666A0938389C1C5735230E50B32A547867FFD351FB14DF928167",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/slsa-framework/slsa-verifier/v2.7.0/slsa-verifier-windows-amd64.exe",
+      "checksum": "61FF8B1CCA6AC0012B0BA906367836F64A389444766BE437DF2A69F71285F43B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/slsa-framework/slsa-verifier/v2.7.0/slsa-verifier-windows-arm64.exe",
+      "checksum": "DDF58798049599C44CAF299B6A9CF8A41760DAA94EE208BDAE8AA78FC75DCB2B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.331.1/registry.yaml",
+      "checksum": "4B35CFEA118CA7CED9D3F218C556C98954810C3116B4000DEFF22782A392A5F0",
+      "algorithm": "sha256"
+    }
+  ]
+}

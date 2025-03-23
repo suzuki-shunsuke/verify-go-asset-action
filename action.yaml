@@ -1,0 +1,92 @@
+name: Verify Assets built with Go
+description: Verify Assets built with Go
+author: Shunsuke Suzuki
+branding:
+  icon: git-commit
+  color: blue
+inputs:
+  version:
+    description: |
+      Assets' version.
+    required: true
+  repository:
+    description: |
+      Tool repository
+    required: false
+    default: ${{github.repository}}
+outputs:
+  dir:
+    value: ${{ steps.tempdir.outputs.value }}
+    description: |
+      The directory where assets are downloaded.
+runs:
+  using: composite
+  steps:
+    # Install tools by aqua
+    - run: echo "value=$GITHUB_ACTION_PATH/aqua/aqua.yaml" >> "$GITHUB_OUTPUT"
+      id: aqua_config
+      shell: bash
+    - uses: aquaproj/aqua-installer@e2d0136abcf70b7a2f6f505720640750557c4b33 # v3.1.1
+      with:
+        aqua_version: v2.46.0
+        skip_install_aqua: "true"
+      env:
+        AQUA_CONFIG: ${{ steps.aqua_config.outputs.value }}
+
+    - id: tempdir
+      shell: bash
+      run: |
+        tempdir=$(mktemp -d)
+        echo "value=$tempdir" >> "$GITHUB_OUTPUT"
+
+    # Download assets from the release
+    - env:
+        GH_TOKEN: ${{github.token}}
+        VERSION: ${{inputs.version}}
+        REPO: ${{inputs.repository}}
+      shell: bash
+      working-directory: ${{ steps.tempdir.outputs.value }}
+      run: |
+        gh release download -R "$REPO" "$VERSION"
+    # Verify assets using Cosign
+    - shell: bash
+      working-directory: ${{ steps.tempdir.outputs.value }}
+      env:
+        AQUA_CONFIG: ${{ steps.aqua_config.outputs.value }}
+      run: |
+        checksum_file=$(find . -name '*_checksums.txt')
+        cosign verify-blob \
+          --signature "${checksum_file}.sig" \
+          --certificate "${checksum_file}.pem" \
+          --certificate-identity-regexp 'https://github\.com/suzuki-shunsuke/go-release-workflow/\.github/workflows/release\.yaml@.*' \
+          --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+          "$checksum_file"
+        sha256sum -c - < "$checksum_file"
+    # Verify assets using SLSA Provenance
+    - shell: bash
+      working-directory: ${{ steps.tempdir.outputs.value }}
+      env:
+        VERSION: ${{inputs.version}}
+        AQUA_CONFIG: ${{ steps.aqua_config.outputs.value }}
+        REPO: ${{inputs.repository}}
+      run: |
+        for asset in *.tar.gz *.zip; do
+          slsa-verifier verify-artifact "$asset" \
+            --provenance-path multiple.intoto.jsonl \
+            --source-uri "github.com/$REPO" \
+            --source-tag "$VERSION"
+        done
+    # Verify assets using GitHub Attestation
+    - shell: bash
+      working-directory: ${{ steps.tempdir.outputs.value }}
+      env:
+        GH_TOKEN: ${{github.token}}
+        VERSION: ${{inputs.version}}
+        REPO: ${{inputs.repository}}
+      run: |
+        for asset in *.tar.gz *.zip; do
+          gh attestation verify "$asset" \
+            -R "$REPO" \
+            --source-ref "refs/tags/$VERSION" \
+            --signer-workflow suzuki-shunsuke/go-release-workflow/.github/workflows/release.yaml
+        done
